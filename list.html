@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+    <style>
+
+/* Small phones to Small tablets: from 481 to 767px */
+@media only screen and (max-width: 767px) {
+
+    	/* Force table to not be like tables anymore */
+	#no-more-tables table, 
+	#no-more-tables thead, 
+	#no-more-tables tbody, 
+	#no-more-tables th, 
+	#no-more-tables td, 
+	#no-more-tables tr { 
+		display: block; 
+	}
+ 
+	/* Hide table headers (but not display: none;, for accessibility) */
+	#no-more-tables thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+ 
+	#no-more-tables tr { 
+		border: 1px solid #ccc;
+		margin-bottom: 10px;
+	}
+ 
+	#no-more-tables td { 
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+		padding-left: 25%; 
+		white-space: normal;
+		text-align:left;
+	}
+ 
+	#no-more-tables td:before { 
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 20%;
+		left: 9px;
+		width: 45%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+		text-align:left;
+		font-weight: bold;
+	}
+ 
+	/*
+	Label the data
+	*/
+	#no-more-tables td:before { content: attr(data-title); }
+}
+
+    
+    </style>
+
+
+    <title>외대 맛집 데이터</title>
+</head>
+
+<body>
+
+    <div id="app" class="container">
+
+        <div class="row">
+           
+
+                    <div id="no-more-tables"> 
+                        <table class="table" v-show="list.length > 0"> 
+                            <thead>
+                                <tr>
+                                    <th class="registered">맛집 이름</th>
+                                    <th class="registered">종류</th>
+                                    <th class="registered">추천 메뉴</th>
+                                    <th class="registered">영업 시간</th>
+                                </tr>
+                            </thead>
+                            <tbody style="font-size:1.7rem;">
+                                <tr v-for="food in list">
+                                    <td data-title="맛집 이름" class="registered">{{ food.name }}</td>
+                                    <td data-title="종류" class="registered">{{ food.type}}</td>
+                                    <td data-title="추천 메뉴" class="registered">{{ food.menu }}</td>
+                                    <td data-title="영업 시간" class="registered">{{ food.time }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                
+            
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.4"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                list: []
+
+            },
+            methods: {
+                getList: function () {
+                    var url = 'http://food.yjdev.com/getList'
+                    // POST /someUrl
+                    this.$http.get(url).then(function (response) {
+
+                        // get status
+                        this.list = response.body;
+
+
+                    }, function (response) {
+                        // error callback
+                        alert('에러!' + response.body.message);
+                    })
+                }
+            },
+            mounted: function() {
+                this.getList();
+            }
+        })
+    </script>
+
+</body>
+
+</html>
