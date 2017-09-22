@@ -129,7 +129,7 @@
                         menu: this.menu,
                         location: this.location
                     };
-                    var url = 'http://localhost:3000'
+                    var url = 'https://food.yjdev.com'
                     // POST /someUrl
                     this.$http.post(url, body).then(function (response) {
 
@@ -177,7 +177,7 @@
                     console.log('sending with image');
                     Vue.http.options.emulateJSON = true;
                     console.log(this.image);
-                    var url = 'http://localhost:3000/image'
+                    var url = 'https://food.yjdev.com/image'
                     var data = new FormData();
                     data.append('image', this.image, this.image.name);
                     data.append('type', this.type);

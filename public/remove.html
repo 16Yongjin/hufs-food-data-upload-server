@@ -126,7 +126,7 @@
             },
             methods: {
                 getList: function () {
-                    var url = 'http://localhost:3000/getList'
+                    var url = 'https://food.yjdev.com/getList'
                     // POST /someUrl
                     this.$http.get(url).then(function (response) {
 
@@ -140,7 +140,7 @@
                     })
                 },
                 remove: function(_id) {
-                    var url = 'http://localhost:3000/remove'
+                    var url = 'https://food.yjdev.com/remove'
                     // POST /someUrl
                     this.$http.post(url, { _id: _id }).then(function (response) {
 
