@@ -92,6 +92,8 @@
                                     <th>종류</th>
                                     <th>추천 메뉴</th>
                                     <th>영업 시간</th>
+                                    <th>삭제</th>
+                                    
                                 </tr>
                             </thead>
                             <tbody style="font-size:1.7rem;">
@@ -101,6 +103,7 @@
                                     <td data-title="종류">{{ food.type}}</td>
                                     <td data-title="추천 메뉴">{{ food.menu }}</td>
                                     <td data-title="영업 시간">{{ food.time }}</td>
+                                    <td data-title="삭제"> <button class="btn btn-default" @click="remove(food._id)">삭제하기</button> </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -130,6 +133,21 @@
                         // get status
                         this.list = response.body;
 
+
+                    }, function (response) {
+                        // error callback
+                        alert('에러!' + response.body.message);
+                    })
+                },
+                remove: function(_id) {
+                    var url = 'http://localhost:3000/remove'
+                    // POST /someUrl
+                    this.$http.post(url, { _id: _id }).then(function (response) {
+
+                        // get status
+                        // this.list = response.body;
+                        console.log('remove!');
+                        this.getList();
 
                     }, function (response) {
                         // error callback

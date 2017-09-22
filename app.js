@@ -41,6 +41,12 @@ app.post('/image', upload.single('image'), foodHandler.uploadImage);
 
 app.get('/getList', foodHandler.list);
 
+app.post('/remove', foodHandler.remove);
+
+app.get('/admin', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/remove.html'));
+})
+
 app.listen(port, () => {
     console.log(`Server is up on port ${port}`);
 });

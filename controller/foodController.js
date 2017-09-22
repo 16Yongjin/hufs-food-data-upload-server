@@ -25,6 +25,22 @@ exports.list = (req, res) => {
         .catch((error) => res.status(400).send({ message: error }))
 }
 
+exports.remove = (req, res) => {
+    Food.findByIdAndRemove(req.body._id)
+        .then((food) => {
+            if (food.image) {
+                fs.unlink(food.image, (err) => console.log(err) );
+                fs.unlink(food.imageThumb, (err) => console.log(err) );
+            }
+
+            console.log(food.name, 'successfully removed!');
+            return res.status(200).send(food);
+        })
+        .catch((err) => {
+            return res.status(400).send({ message: err });
+        });
+}
+
 var IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
 
 exports.uploadImage = function(req, res) {
