@@ -9,6 +9,24 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
         crossorigin="anonymous">
     <title>외대 맛집 데이터</title>
+    <style>
+        .btn-bs-file {
+            position: relative;
+            width: 83%;
+            margin: 10px;
+        }
+
+        .btn-bs-file input[type="file"] {
+            position: absolute;
+            top: -9999999;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            width: 0;
+            height: 0;
+            outline: none;
+            cursor: inherit;
+        }
+    </style>
 </head>
 
 <body>
@@ -45,13 +63,16 @@
                             </p>
                             <p>
                                 위치:
-                                <button type="button" @click.prevent="getLocation" :disabled="geoButtonDisabled" class="btn btn-warning pull-right" > {{ geoButtonText }} </button>
+                                <button type="button" @click.prevent="getLocation" :disabled="geoButtonDisabled" class="btn btn-warning pull-right"> {{ geoButtonText }} </button>
                                 <input disabled="true" class="form-control" type="text" v-model="locationText">
                             </p>
                             <p>
-                                이미지: <input type="file" id="image" accept="image/*" class="form-control-file"  @change="loadFile">
+                                사진:
+                                <label class="btn-bs-file btn btn-default">
+                                <span v-if="!image">사진 추가하기</span><span v-else>{{ image.name }}</span> <input type="file" id="image" accept="image/*" @change="loadFile">
+                                </label>
                             </p>
-                            <button type="submit" @click.prevent="submitted" class="btn btn-lg btn-primary center-block">Submit</button>
+                            <button type="submit" @click.prevent="submitted" style="width: 100%;" class="btn btn-lg btn-primary center-block">Submit</button>
 
                         </form>
 
@@ -72,7 +93,6 @@
     <script src="https://unpkg.com/vue"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.4"></script>
     <script>
-        
         var app = new Vue({
             el: '#app',
             data: {
@@ -99,7 +119,7 @@
                     }
 
                     console.log('sending default');
-                    
+
                     Vue.http.options.emulateJSON = false;
 
                     var body = {
@@ -116,7 +136,7 @@
                         // get status
                         // this.someData = response.body;
                         this.clearForm();
-                        
+
                         alert('저장 완료');
 
                     }, function (response) {
@@ -136,7 +156,7 @@
                     navigator.geolocation.getCurrentPosition(function (position) {
                         app.geoButtonDisabled = false;
                         app.geoButtonText = '위치 가져오기';
-                        
+
                         app.location = {
                             latitude: position.coords.latitude,
                             longitude: position.coords.longitude
@@ -149,11 +169,11 @@
                         alert('위치를 가져올 수가 없습니다.');
                     });
                 },
-                loadFile: function(e) {
+                loadFile: function (e) {
                     console.log(e.target.files[0]);
                     this.image = e.target.files[0];
                 },
-                submittedWithImage: function(e) {
+                submittedWithImage: function (e) {
                     console.log('sending with image');
                     Vue.http.options.emulateJSON = true;
                     console.log(this.image);
@@ -165,7 +185,7 @@
                     data.append('menu', this.menu);
                     data.append('name', this.name);
                     data.append('location', this.location);
-                    
+
                     this.$http.post(url, data).then(function (response) {
 
                         // get status
@@ -179,7 +199,7 @@
                     })
 
                 },
-                clearForm: function() {
+                clearForm: function () {
                     this.name = ''
                     this.type = ''
                     this.time = ''
