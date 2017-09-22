@@ -72,7 +72,7 @@ exports.uploadImage = function(req, res) {
             console.log('All done!');
         });
    
-        const food = new Food({ ...req.body, image: targetPath, imageThumb: thumbPath});
+        const food = new Food( Object.assign(req.body, {image: targetPath, imageThumb: thumbPath}) );
         food.save((error) => {
             if (error) {
                 return res.status(400).send({

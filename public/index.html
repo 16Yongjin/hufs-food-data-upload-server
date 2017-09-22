@@ -109,7 +109,7 @@
                         menu: this.menu,
                         location: this.location
                     };
-                    var url = 'https://food.yjdev.com:3000'
+                    var url = 'https://food.yjdev.com'
                     // POST /someUrl
                     this.$http.post(url, body).then(function (response) {
 
@@ -160,11 +160,11 @@
                     var url = 'https://food.yjdev.com/image'
                     var data = new FormData();
                     data.append('image', this.image, this.image.name);
-                    data.append('type', this.name);
-                    data.append('time', this.name);
-                    data.append('menu', this.name);
+                    data.append('type', this.type);
+                    data.append('time', this.time);
+                    data.append('menu', this.menu);
                     data.append('name', this.name);
-                    data.append('location', this.name);
+                    data.append('location', this.location);
                     
                     this.$http.post(url, data).then(function (response) {
 
