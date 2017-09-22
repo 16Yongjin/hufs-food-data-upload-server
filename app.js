@@ -2,6 +2,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const mongoose = require('mongoose');
+const multer = require('multer');
+const upload = multer({
+    dest: 'public/uploads/',
+    limits: { fileSize: 10000000, files: 1 }
+});
+
 const foodHandler = require('./controller/foodController');
 
 
@@ -15,18 +21,23 @@ mongoose.connection
 
 const port = process.env.PORT || 3000;
 
-var app = express();
+const app = express();
 app.use(bodyParser.json());
+app.use('/', express.static(path.join(__dirname, 'public')));
+app.use('/public', express.static(path.join(__dirname, 'public')));
+
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname + '/index.html'));
+    res.sendFile(path.join(__dirname, 'public/index.html'));
 });
 
 app.post('/', foodHandler.create);
 
 app.get('/list', (req, res) => {
-    res.sendFile(path.join(__dirname + '/list.html'));
-})
+    res.sendFile(path.join(__dirname, 'public/list.html'));
+});
+
+app.post('/image', upload.single('image'), foodHandler.uploadImage);
 
 app.get('/getList', foodHandler.list);
 

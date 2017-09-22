@@ -48,6 +48,9 @@
                                 <button type="button" @click.prevent="getLocation" :disabled="geoButtonDisabled" class="btn btn-warning pull-right" > {{ geoButtonText }} </button>
                                 <input disabled="true" class="form-control" type="text" v-model="locationText">
                             </p>
+                            <p>
+                                이미지: <input type="file" id="image" accept="image/*" class="form-control-file"  @change="loadFile">
+                            </p>
                             <button type="submit" @click.prevent="submitted" class="btn btn-lg btn-primary center-block">Submit</button>
 
                         </form>
@@ -59,6 +62,7 @@
                             <p>{{ menu }}</p>
                             <p>{{ locationText }}</p>
                         </div> -->
+
                     </div>
                 </div>
             </div>
@@ -68,6 +72,7 @@
     <script src="https://unpkg.com/vue"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.4"></script>
     <script>
+        
         var app = new Vue({
             el: '#app',
             data: {
@@ -78,14 +83,24 @@
                 locationText: '',
                 location: '',
                 geoButtonDisabled: false,
-                geoButtonText: '위치 가져오기'
+                geoButtonText: '위치 가져오기',
+                image: ''
 
             },
             methods: {
                 submitted: function () {
+
                     if (!this.name || !this.type || !this.menu) {
                         return alert('정보가 부족해요.');
                     }
+
+                    if (this.image) {
+                        return this.submittedWithImage();
+                    }
+
+                    console.log('sending default');
+                    
+                    Vue.http.options.emulateJSON = false;
 
                     var body = {
                         name: this.name,
@@ -94,18 +109,14 @@
                         menu: this.menu,
                         location: this.location
                     };
-                    var url = 'http://food.yjdev.com'
+                    var url = 'https://food.yjdev.com:3000'
                     // POST /someUrl
                     this.$http.post(url, body).then(function (response) {
 
                         // get status
                         // this.someData = response.body;
-                        this.name = ''
-                        this.type = ''
-                        this.time = ''
-                        this.menu = ''
-                        this.location = ''
-                        this.locationText = ''
+                        this.clearForm();
+                        
                         alert('저장 완료');
 
                     }, function (response) {
@@ -137,6 +148,46 @@
                         app.geoButtonText = '위치 가져오기';
                         alert('위치를 가져올 수가 없습니다.');
                     });
+                },
+                loadFile: function(e) {
+                    console.log(e.target.files[0]);
+                    this.image = e.target.files[0];
+                },
+                submittedWithImage: function(e) {
+                    console.log('sending with image');
+                    Vue.http.options.emulateJSON = true;
+                    console.log(this.image);
+                    var url = 'https://food.yjdev.com/image'
+                    var data = new FormData();
+                    data.append('image', this.image, this.image.name);
+                    data.append('type', this.name);
+                    data.append('time', this.name);
+                    data.append('menu', this.name);
+                    data.append('name', this.name);
+                    data.append('location', this.name);
+                    
+                    this.$http.post(url, data).then(function (response) {
+
+                        // get status
+                        // this.someData = response.body;
+                        this.clearForm();
+                        alert('저장 완료');
+
+                    }, function (response) {
+                        // error callback
+                        alert('에러!' + response.body.message);
+                    })
+
+                },
+                clearForm: function() {
+                    this.name = ''
+                    this.type = ''
+                    this.time = ''
+                    this.menu = ''
+                    this.location = ''
+                    this.locationText = ''
+                    this.image = ''
+                    document.getElementById("image").value = "";
                 }
             }
         })

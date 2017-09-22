@@ -6,7 +6,9 @@ const FoodSchema = new Schema({
     type: String,
     time: String,
     menu: String,
-    location: Object
+    location: Object,
+    image: String,
+    imageThumb: String
 });
 
 FoodSchema.virtual('foodCount').get(function() {

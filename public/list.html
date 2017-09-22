@@ -64,6 +64,10 @@
 	#no-more-tables td:before { content: attr(data-title); }
 }
 
+.imageSize {
+    width: 200px;
+}
+
     
     </style>
 
@@ -82,6 +86,8 @@
                         <table class="table" v-show="list.length > 0"> 
                             <thead>
                                 <tr>
+                                    
+                                    <th class="registered">사진</th>
                                     <th class="registered">맛집 이름</th>
                                     <th class="registered">종류</th>
                                     <th class="registered">추천 메뉴</th>
@@ -90,6 +96,7 @@
                             </thead>
                             <tbody style="font-size:1.7rem;">
                                 <tr v-for="food in list">
+                                    <td data-title="사진" class="registered"><img v-if="food.imageThumb" :src="food.imageThumb" class="imageSize"></td>                                        
                                     <td data-title="맛집 이름" class="registered">{{ food.name }}</td>
                                     <td data-title="종류" class="registered">{{ food.type}}</td>
                                     <td data-title="추천 메뉴" class="registered">{{ food.menu }}</td>
@@ -116,7 +123,7 @@
             },
             methods: {
                 getList: function () {
-                    var url = 'http://food.yjdev.com/getList'
+                    var url = 'https://food.yjdev.com/getList'
                     // POST /someUrl
                     this.$http.get(url).then(function (response) {
 
